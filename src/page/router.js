@@ -1,13 +1,37 @@
 import React from 'react';
-import { Button, Card } from 'antd';
+import { Button, Card, Collapse } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
+import BasicForm from './form/basic_form';
+import InterfaceForm from './form/interface_form';
+
+const { Panel } = Collapse;
 
 class Router extends React.Component{
     constructor(props) {
         super(props);
         const { router_id } = props.match.params;
-        this.state = { router_id };
+        this.state = {
+            router_id,
+            interfaces: [
+                {
+                    name: 'FastEthernet0/0',
+                    abbr: 'f0/0'
+                },
+                {
+                    name: 'FastEthernet0/1',
+                    abbr: 'f0/1'
+                },
+                {
+                    name: 'Serial0/0/0',
+                    abbr: 's0/0/0'
+                },
+                {
+                    name: 'Serial0/0/1',
+                    abbr: 's0/0/1'
+                }
+            ]
+        };
     }
 
     logout = () => {
@@ -18,16 +42,18 @@ class Router extends React.Component{
         const { router_id } = this.state;
         console.log(`连接R${router_id}。。。`);
         console.log('获取路由器信息。。。');
+        sessionStorage.setItem('connectionId', 'c1');
         console.log(`router_id: ${router_id}`);
     }
 
     componentWillUnmount() {
         const { router_id } = this.state;
         console.log(`断开连接R${router_id}。。。`);
+        sessionStorage.removeItem('connectionId');
     }
 
     render() {
-        const { router_id } = this.state;
+        const { interfaces } = this.state;
         return (
             <Card
                 title={'路由器信息'}
@@ -41,8 +67,20 @@ class Router extends React.Component{
                     </Button>
                 }
             >
-                <h4>主机名：R{router_id}</h4>
-                <h4>IP地址：……</h4>
+                <Collapse defaultActiveKey={'basic'}>
+                    <Panel key={'basic'} header={'基本配置'} disabled>
+                        <BasicForm />
+                    </Panel>
+                    <Panel key={'interface'} header={'接口配置'}>
+                        <Collapse>
+                            {interfaces.map(({ name, abbr }) => (
+                                <Panel key={`int-${abbr}`} header={`${name} (${abbr})`}>
+                                    <InterfaceForm abbr={abbr} />
+                                </Panel>
+                            ))}
+                        </Collapse>
+                    </Panel>
+                </Collapse>
             </Card>
         );
     }
