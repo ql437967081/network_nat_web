@@ -68,7 +68,7 @@ class Router extends React.Component{
                 }
             >
                 <Collapse defaultActiveKey={'basic'}>
-                    <Panel key={'basic'} header={'基本配置'} disabled>
+                    <Panel key={'basic'} header={'基本配置'} collapsible={'disabled'}>
                         <BasicForm />
                     </Panel>
                     <Panel key={'interface'} header={'接口配置'}>

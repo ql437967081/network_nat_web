@@ -1,5 +1,7 @@
 import React from 'react';
-import {Form, Input} from 'antd';
+import { Button, Col, Form, Row, Switch } from 'antd';
+import { CheckOutlined } from '@ant-design/icons';
+import AddressInput from '../address_input'
 
 export default class InterfaceForm extends React.Component {
     state = {
@@ -23,16 +25,32 @@ export default class InterfaceForm extends React.Component {
         });
     }
 
+    onFinish = (values) => {
+        console.log('Success:', values);
+    };
+
+    onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
     render() {
         const layout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 10 },
+            labelCol: { span: 6 },
+            wrapperCol: { span: 14 },
         };
         return (
-            <Form {...layout} ref={this.formRef}>
-                <Form.Item label={'IP地址'} name={['ip_address', 'primary', 'ip']}><Input /></Form.Item>
-                <Form.Item label={'子网掩码'} name={['ip_address', 'primary', 'netmask']}><Input /></Form.Item>
-                <Form.Item label={'端口状态'} name={'is_open'}><Input /></Form.Item>
+            <Form {...layout} ref={this.formRef} onFinish={this.onFinish} onFinishFailed={this.onFinishFailed}>
+                <Form.Item label={'IP地址'} name={['ip_address', 'primary', 'ip']}><AddressInput /></Form.Item>
+                <Form.Item label={'子网掩码'} name={['ip_address', 'primary', 'netmask']}><AddressInput /></Form.Item>
+                <Form.Item label={'端口状态'} name={'is_open'} valuePropName='checked'><Switch /></Form.Item>
+                <Row justify="space-between">
+                    <Col />
+                    <Col>
+                        <Button type="primary" icon={<CheckOutlined />} htmlType="submit">
+                            提交
+                        </Button>
+                    </Col>
+                </Row>
             </Form>
         );
     }
