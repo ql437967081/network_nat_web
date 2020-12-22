@@ -16,7 +16,8 @@ class Router extends React.Component{
             interfaces: [
                 {
                     name: 'FastEthernet0/0',
-                    abbr: 'f0/0'
+                    abbr: 'f0/0',
+                    disabled: true
                 },
                 {
                     name: 'FastEthernet0/1',
@@ -73,11 +74,19 @@ class Router extends React.Component{
                     </Panel>
                     <Panel key={'interface'} header={'接口配置'}>
                         <Collapse>
-                            {interfaces.map(({ name, abbr }) => (
-                                <Panel key={`int-${abbr}`} header={`${name} (${abbr})`}>
-                                    <InterfaceForm abbr={abbr} />
-                                </Panel>
-                            ))}
+                            {interfaces.map(({ name, abbr, disabled }) => {
+                                const disabledText = disabled ? '（不可配置）' : '';
+                                const inputProps = {};
+                                if (disabled) inputProps['disabled'] = true;
+                                return (
+                                    <Panel
+                                        key={`int-${abbr}`}
+                                        header={`${name} (${abbr})${disabledText}`}
+                                    >
+                                        <InterfaceForm abbr={abbr} {...inputProps} />
+                                    </Panel>
+                                );
+                            })}
                         </Collapse>
                     </Panel>
                 </Collapse>
