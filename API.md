@@ -31,9 +31,10 @@ GET: /interface
 	name: 'FastEthernet0/0',
     abbr: 'f0/0',
     ip_address: {
-        primary: { ip: '172.16.0.2', netmask: '255.255.255.0', mask_bit: 24 },
+        primary: { ip: '172.16.0.2', netmask: '255.255.0.0', mask_bit: 16 },
         secondary: []	// 见实验手册51页NAT章节
     },
+    ip_nat: null,	// null | ‘inside’ | 'outside'
     is_open: true
 }
 ```
@@ -42,9 +43,7 @@ GET: /interface
 
 POST: /interface
 
-参数：
-
-connection_id
+参数：connection_id
 
 * request body:
 
@@ -52,9 +51,10 @@ connection_id
 {
     abbr: 'f0/0',
     ip_address: {
-        primary: { ip: '172.16.0.2', netmask: '255.255.255.0', mask_bit: 24 },
+        primary: { ip: '172.16.0.2', netmask: '255.255.0.0' },
         secondary: []
     },
+    ip_nat: null,	// null | ‘inside’ | 'outside'
     is_open: true
 }
 ```
@@ -73,9 +73,7 @@ GET: /hostname
 
 POST: /hostname
 
-参数：
-
-connection_id
+参数：connection_id
 
 * request body:
 
@@ -87,3 +85,151 @@ connection_id
 
 返回值：output
 
+## 查看NAT转换表
+
+GET: /nat_translations
+
+参数：connection_id
+
+执行命令：
+
+```
+show ip nat translations
+```
+
+返回值：output
+
+## 清除NAT转换表
+
+DELETE: /nat_translations
+
+参数：connection_id
+
+执行命令：
+
+```
+clear ip nat translation *
+```
+
+## Ping
+
+GET: /ping
+
+参数：connection_id	target	source（源地址、可能为空）
+
+返回值：output
+
+## 设置静态路由
+
+POST: /static_route
+
+参数：connection_id
+
+执行命令：（为R1加上去往R3的静态路由）
+
+```
+conf t
+ip route 200.1.1.0 255.255.255.0 s0/0/0
+end
+```
+
+返回值：output
+
+## 配置静态NAT
+
+POST: /static_nat
+
+参数：connection_id
+
+执行命令：（在R2上完成静态NAT的配置）
+
+```
+conf t
+ip nat inside source static 192.168.1.1 200.1.1.254
+end
+```
+
+返回值：output
+
+## 删除静态NAT
+
+DELETE: /static_nat
+
+参数：connection_id
+
+执行命令：（在R2上删除静态NAT的配置）
+
+```
+conf t
+no ip nat inside source static 192.168.1.1 200.1.1.254
+end
+```
+
+返回值：output
+
+## 配置用户访问控制列表
+
+POST: /access_list
+
+参数：connection_id
+
+执行命令：（在R2上通过使用用户访问控制列表来定义本地地址池）
+
+```
+conf t
+access-list 1 permit 192.168.1.0 0.0.0.255
+end
+```
+
+返回值：output
+
+## 配置动态NAT
+
+POST: /dynamic_nat
+
+参数：connection_id
+
+执行命令：（在R2上完成动态NAT的配置）
+
+```
+conf t
+ip nat pool nju 200.1.1.253 200.1.1.254 p 24
+ip nat inside source list 1 pool nju
+end
+```
+
+返回值：output
+
+## 删除动态NAT
+
+DELETE: /dynamic_nat
+
+参数：connection_id
+
+执行命令：（在R2上删除动态NAT的配置）
+
+```
+conf t
+no ip nat inside source list 1 pool nju
+no ip nat pool nju 200.1.1.253 200.1.1.254 p 24
+end
+```
+
+返回值：output
+
+## 配置PAT
+
+POST: /pat
+
+参数：connection_id
+
+执行命令：（在R2上完成PAT的配置）
+
+```
+conf t
+ip nat pool nju 200.1.1.253 200.1.1.253 p 24
+ip nat inside source list 1 pool nju overload
+end
+```
+
+返回值：output
