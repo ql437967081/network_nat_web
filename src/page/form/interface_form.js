@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col, Form, Row, Switch } from 'antd';
+import { Button, Col, Form, Radio, Row, Switch } from 'antd';
 import { CheckOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import AddressWithNetmaskInput from '../input/address_with_netmask_input';
 import './dynamic_delete_button.css';
@@ -22,6 +22,7 @@ export default class InterfaceForm extends React.Component {
                 primary: { ip: '172.16.0.2', netmask: '255.255.0.0', mask_bit: 16 },
                 secondary: []
             },
+            ip_nat: null,
             is_open: true
         });
     }
@@ -52,7 +53,7 @@ export default class InterfaceForm extends React.Component {
                     <AddressWithNetmaskInput {...inputProps} />
                 </Form.Item>
                 {!disabled && (
-                    <Form.List name={'secondary'}>
+                    <Form.List name={['ip_address', 'secondary']}>
                         {(fields, { add, remove }, { errors }) => (
                             <>
                                 {fields.map((field, index) => (
@@ -89,6 +90,13 @@ export default class InterfaceForm extends React.Component {
                         )}
                     </Form.List>
                 )}
+                <Form.Item label={'NAT'} name={'ip_nat'}>
+                    <Radio.Group {...inputProps}>
+                        <Radio.Button value={null}>无</Radio.Button>
+                        <Radio.Button value={'inside'}>内部地址</Radio.Button>
+                        <Radio.Button value={'outside'}>外部地址</Radio.Button>
+                    </Radio.Group>
+                </Form.Item>
                 <Form.Item label={'端口状态'} name={'is_open'} valuePropName='checked'>
                     <Switch {...inputProps} />
                 </Form.Item>
