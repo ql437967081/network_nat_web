@@ -3,17 +3,14 @@ import { Button, Col, Form, Radio, Row, Switch } from 'antd';
 import { CheckOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import AddressWithNetmaskInput from '../input/address_with_netmask_input';
 import './dynamic_delete_button.css';
+import { getConnection } from '../../sessionConfig';
 
 export default class InterfaceForm extends React.Component {
-    state = {
-        connectionId: sessionStorage.getItem('connectionId')
-    };
-
     formRef = React.createRef();
 
     componentDidMount() {
         const { abbr } = this.props;
-        const { connectionId } = this.state;
+        const connectionId = getConnection();
         console.log(`（Connection: ${connectionId}）获取接口（${abbr}）信息……`);
         this.formRef.current.setFieldsValue({
             name: 'FastEthernet0/0',

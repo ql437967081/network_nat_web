@@ -4,15 +4,19 @@ import { LogoutOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import BasicForm from './form/basic_form';
 import InterfaceForm from './form/interface_form';
+import { setConnection, exitConnection } from '../sessionConfig';
+import StaticRoutePanel from './panel/static_route_panel';
+import StaticNATPanel from './panel/static_nat_panel';
+import AccessListPanel from './panel/access_list_panel';
+import DynamicNATPanel from './panel/dynamic_nat_panel';
+import PATPanel from './panel/pat_panel';
 
 const { Panel } = Collapse;
 
 class Router extends React.Component{
     constructor(props) {
         super(props);
-        const { router_id } = props.match.params;
         this.state = {
-            router_id,
             interfaces: [
                 {
                     name: 'FastEthernet0/0',
@@ -39,18 +43,23 @@ class Router extends React.Component{
         this.props.history.push('/home');
     };
 
+    getRouterId = () => {
+        const { router_id } = this.props.match.params;
+        return router_id;
+    };
+
     componentDidMount() {
-        const { router_id } = this.state;
+        const router_id = this.getRouterId();
         console.log(`连接R${router_id}。。。`);
         console.log('获取路由器信息。。。');
-        sessionStorage.setItem('connectionId', 'c1');
+        setConnection(router_id, 'c1');
         console.log(`router_id: ${router_id}`);
     }
 
     componentWillUnmount() {
-        const { router_id } = this.state;
+        const router_id = this.getRouterId();
         console.log(`断开连接R${router_id}。。。`);
-        sessionStorage.removeItem('connectionId');
+        exitConnection();
     }
 
     render() {
@@ -89,6 +98,11 @@ class Router extends React.Component{
                             })}
                         </Collapse>
                     </Panel>
+                    {parseInt(this.getRouterId()) === 1 && <StaticRoutePanel />}
+                    {parseInt(this.getRouterId()) === 2 && <StaticNATPanel />}
+                    {parseInt(this.getRouterId()) === 2 && <AccessListPanel />}
+                    {parseInt(this.getRouterId()) === 2 && <DynamicNATPanel />}
+                    {parseInt(this.getRouterId()) === 2 && <PATPanel />}
                 </Collapse>
             </Card>
         );

@@ -1,16 +1,13 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row } from 'antd';
 import { CheckOutlined } from "@ant-design/icons";
+import { getConnection } from '../../sessionConfig';
 
 export default class BasicForm extends React.Component {
-    state = {
-        connectionId: sessionStorage.getItem('connectionId')
-    };
-
     formRef = React.createRef();
 
     componentDidMount() {
-        const { connectionId } = this.state;
+        const connectionId = getConnection();
         console.log(`（Connection: ${connectionId}）获取基本信息……`);
         this.formRef.current.setFieldsValue({ hostname: 'R1' });
     }
