@@ -5,11 +5,11 @@ import { withRouter } from 'react-router-dom';
 import BasicForm from './form/basic_form';
 import InterfaceForm from './form/interface_form';
 import { setConnection, exitConnection } from '../sessionConfig';
-import StaticRoutePanel from './panel/static_route_panel';
-import StaticNATPanel from './panel/static_nat_panel';
-import AccessListPanel from './panel/access_list_panel';
-import DynamicNATPanel from './panel/dynamic_nat_panel';
-import PATPanel from './panel/pat_panel';
+import StaticRoute from './panel/static_route';
+import StaticNAT from './panel/static_nat';
+import AccessList from './panel/access_list';
+import DynamicNAT from './panel/dynamic_nat';
+import PAT from './panel/pat';
 
 const { Panel } = Collapse;
 
@@ -64,6 +64,7 @@ class Router extends React.Component{
 
     render() {
         const { interfaces } = this.state;
+        const routerId = parseInt(this.getRouterId());
         return (
             <Card
                 title={'路由器信息'}
@@ -98,11 +99,25 @@ class Router extends React.Component{
                             })}
                         </Collapse>
                     </Panel>
-                    {parseInt(this.getRouterId()) === 1 && <StaticRoutePanel />}
-                    {parseInt(this.getRouterId()) === 2 && <StaticNATPanel />}
-                    {parseInt(this.getRouterId()) === 2 && <AccessListPanel />}
-                    {parseInt(this.getRouterId()) === 2 && <DynamicNATPanel />}
-                    {parseInt(this.getRouterId()) === 2 && <PATPanel />}
+                    {routerId === 1 && (
+                        <Panel key={'static_route'} header={'静态路由'}>
+                            <StaticRoute />
+                        </Panel>
+                    )}
+                    {routerId === 2 && [
+                        <Panel key={'static_nat'} header={'静态NAT'}>
+                            <StaticNAT />
+                        </Panel>,
+                        <Panel key={'access_list'} header={'用户访问控制列表'}>
+                            <AccessList />
+                        </Panel>,
+                        <Panel key={'dynamic_nat'} header={'动态NAT'}>
+                            <DynamicNAT />
+                        </Panel>,
+                        <Panel key={'pat'} header={'PAT'}>
+                            <PAT />
+                        </Panel>
+                    ]}
                 </Collapse>
             </Card>
         );
