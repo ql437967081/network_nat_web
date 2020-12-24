@@ -10,6 +10,7 @@ import StaticNAT from './panel/static_nat';
 import AccessList from './panel/access_list';
 import DynamicNAT from './panel/dynamic_nat';
 import PAT from './panel/pat';
+import Ping from './panel/ping';
 
 const { Panel } = Collapse;
 
@@ -118,6 +119,9 @@ class Router extends React.Component{
                             <PAT />
                         </Panel>
                     ]}
+                    <Panel key={'ping'} header={'Ping'}>
+                        <Ping />
+                    </Panel>
                 </Collapse>
             </Card>
         );
