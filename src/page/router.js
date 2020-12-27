@@ -11,6 +11,7 @@ import AccessList from './panel/access_list';
 import DynamicNAT from './panel/dynamic_nat';
 import PAT from './panel/pat';
 import Ping from './panel/ping';
+import ShowNAtList from "./panel/show_nat_list";
 
 const { Panel } = Collapse;
 
@@ -119,6 +120,9 @@ class Router extends React.Component{
                             <PAT />
                         </Panel>
                     ]}
+                    <Panel key={'show_nat_list'} header={'查看NAT转换表'}>
+                            <ShowNAtList/>
+                    </Panel>
                     <Panel key={'ping'} header={'Ping'}>
                         <Ping />
                     </Panel>

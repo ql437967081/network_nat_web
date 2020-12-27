@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { Button, Col, Row } from 'antd';
 import GeneralContent from './general_content';
 
-export default function StaticNAT() {
+export default function ShowNAtList(){
     const [result, setResult] = useState(null);
 
     const conf = () => {
-        console.log('配置静态NAT');
+        console.log('查看NAT列表');
         setResult('conf t\n' +
-            'ip nat inside source static 192.168.1.1 200.1.1.254\n' +
+            'show ip nat translations\n' +
             'end');
     };
 
     const delConf = () => {
-        console.log('删除静态NAT配置');
+        console.log('清楚NAT列表');
         setResult('conf t\n' +
-            'no ip nat inside source static 192.168.1.1 200.1.1.254\n' +
+            'clear ip nat translation *\n' +
             'end')
     };
 
@@ -24,12 +24,12 @@ export default function StaticNAT() {
             <Row justify="space-between" align="middle">
                 <Col>
                     <Button type={'primary'} onClick={conf}>
-                        配置
+                        查看
                     </Button>
                 </Col>
                 <Col>
                     <Button type={'primary'} onClick={delConf} danger>
-                        删除配置
+                        清空
                     </Button>
                 </Col>
             </Row>
