@@ -1,39 +1,58 @@
 import React from 'react';
-import { Button, Col, Form, Radio, Row, Switch } from 'antd';
+import { Button, Col, Form, message, Radio, Row, Switch } from 'antd';
 import { CheckOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import AddressWithNetmaskInput from '../input/address_with_netmask_input';
 import './dynamic_delete_button.css';
 import { getConnection } from '../../sessionConfig';
+import { backendModeConfig } from '../../api/util/default';
+import { getInterface, setInterface } from '../../api/interface_api';
 
 export default class InterfaceForm extends React.Component {
+    state = { loading: false };
+
     formRef = React.createRef();
 
     componentDidMount() {
         const { abbr } = this.props;
         const connectionId = getConnection();
         console.log(`（Connection: ${connectionId}）获取接口（${abbr}）信息……`);
-        this.formRef.current.setFieldsValue({
-            name: 'FastEthernet0/0',
-            abbr: 'f0/0',
-            ip_address: {
-                primary: { ip: '172.16.0.2', netmask: '255.255.0.0', mask_bit: 16 },
-                secondary: []
-            },
-            ip_nat: null,
-            is_open: true
-        });
+        if (backendModeConfig) {
+            getInterface(abbr, data => this.formRef.current.setFieldsValue(data));
+        } else {
+            this.formRef.current.setFieldsValue({
+                name: 'FastEthernet0/0',
+                abbr: 'f0/0',
+                ip_address: {
+                    primary: { ip: '172.16.0.2', netmask: '255.255.0.0', mask_bit: 16 },
+                    secondary: []
+                },
+                ip_nat: null,
+                is_open: true
+            });
+        }
     }
 
     onFinish = (values) => {
         console.log('Success:', values);
+        if (backendModeConfig) {
+            this.setState({ loading: true });
+            const { abbr } = this.props;
+            const data = { ...values, abbr };
+            setInterface(data, s => {
+                this.setState({ loading: false });
+                message.success(`接口（${abbr}）设置成功！`);
+            });
+        }
     };
 
     onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
+        message.error(errorInfo.errorFields[0].errors[0]);
     };
 
     render() {
         const { disabled } = this.props;
+        const { loading } = this.state;
         const inputProps = {};
         if (disabled) inputProps['disabled'] = true;
         const layout = {
@@ -101,7 +120,7 @@ export default class InterfaceForm extends React.Component {
                     <Row justify="space-between">
                         <Col />
                         <Col>
-                            <Button type="primary" icon={<CheckOutlined />} htmlType="submit">
+                            <Button type="primary" icon={<CheckOutlined />} htmlType="submit" loading={loading}>
                                 提交
                             </Button>
                         </Col>

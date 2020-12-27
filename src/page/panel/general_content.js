@@ -1,16 +1,17 @@
 import React from 'react';
-import { Space, Typography } from 'antd';
+import { Space, Spin, Typography } from 'antd';
 
 const { Paragraph } = Typography;
 
-export default function GeneralContent(props) {
-    const { result } = props;
+export default function GeneralContent({ result, loading, spinTip, children }) {
     return (
         <Space direction={'vertical'} style={{ width: '100%' }}>
-            {props.children}
+            {children}
             <Paragraph>
-                <pre>
-                    {result || '//输出结果。。。'}
+                <pre style={{ minHeight: 60 }}>
+                    <Spin tip={spinTip || '命令执行中。。。'} spinning={loading}>
+                        {result || '//输出结果\n//。。。'}
+                    </Spin>
                 </pre>
             </Paragraph>
         </Space>

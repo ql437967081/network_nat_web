@@ -34,11 +34,11 @@ export default function MainLayout({ children }) {
                 </Space>
             </Header>
             <Layout>
-                <Content style={{ padding: '24px' }}>
+                <Content style={{ padding: '24px', marginRight: 500 }}>
                     {children}
                 </Content>
                 <Sider
-                    style={{ backgroundColor: 'white' }}
+                    style={{ backgroundColor: 'white', position: 'fixed', right: 0, overflow: 'auto', height: '80vh' }}
                     width={500}
                     trigger={null}
                     collapsible
