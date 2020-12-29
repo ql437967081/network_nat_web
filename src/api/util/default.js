@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { handleFailure } from './func';
 
-const backendModeConfig = false;
+const backendModeConfig = true;
 
 export { axios, handleFailure, backendModeConfig };

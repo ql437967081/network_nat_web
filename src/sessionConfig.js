@@ -10,6 +10,6 @@ const setConnection = (routerId, connectionId) => {
     sessionStorage.setItem('connectionId', connectionId);
 };
 
-const getRouterId = sessionStorage.getItem('routerId');
+const getRouterId = () => parseInt(sessionStorage.getItem('routerId'));
 
 export { getConnection, setConnection, exitConnection, getRouterId };

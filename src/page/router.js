@@ -73,9 +73,7 @@ class Router extends React.Component{
         const router_id = this.getRouterId();
         console.log(`断开连接R${router_id}。。。`);
         if (backendModeConfig) {
-            this.setState({ loading: true, spinTip: '断开连接。。。' });
             exit(s => {
-                this.setState({ loading: false });
                 exitConnection();
                 message.success('路由器连接已断开');
             });
@@ -101,53 +99,55 @@ class Router extends React.Component{
                         </Button>
                     }
                 >
-                    <Collapse defaultActiveKey={'basic'}>
-                        <Panel key={'basic'} header={'基本配置'} collapsible={'disabled'}>
-                            <BasicForm />
-                        </Panel>
-                        <Panel key={'interface'} header={'接口配置'}>
-                            <Collapse>
-                                {interfaces.map(({ name, abbr, disabled }) => {
-                                    const disabledText = disabled ? '（不可配置）' : '';
-                                    const inputProps = {};
-                                    if (disabled) inputProps['disabled'] = true;
-                                    return (
-                                        <Panel
-                                            key={`int-${abbr}`}
-                                            header={`${name} (${abbr})${disabledText}`}
-                                        >
-                                            <InterfaceForm abbr={abbr} {...inputProps} />
-                                        </Panel>
-                                    );
-                                })}
-                            </Collapse>
-                        </Panel>
-                        {routerId === 1 && (
-                            <Panel key={'static_route'} header={'静态路由'}>
-                                <StaticRoute />
+                    {!loading && (
+                        <Collapse defaultActiveKey={'basic'}>
+                            <Panel key={'basic'} header={'基本配置'} collapsible={'disabled'}>
+                                <BasicForm />
                             </Panel>
-                        )}
-                        {routerId === 2 && [
-                            <Panel key={'static_nat'} header={'静态NAT'}>
-                                <StaticNAT />
-                            </Panel>,
-                            <Panel key={'access_list'} header={'用户访问控制列表'}>
-                                <AccessList />
-                            </Panel>,
-                            <Panel key={'dynamic_nat'} header={'动态NAT'}>
-                                <DynamicNAT />
-                            </Panel>,
-                            <Panel key={'pat'} header={'PAT'}>
-                                <PAT />
+                            <Panel key={'interface'} header={'接口配置'}>
+                                <Collapse>
+                                    {interfaces.map(({ name, abbr, disabled }) => {
+                                        const disabledText = disabled ? '（不可配置）' : '';
+                                        const inputProps = {};
+                                        if (disabled) inputProps['disabled'] = true;
+                                        return (
+                                            <Panel
+                                                key={`int-${abbr}`}
+                                                header={`${name} (${abbr})${disabledText}`}
+                                            >
+                                                <InterfaceForm abbr={abbr} {...inputProps} />
+                                            </Panel>
+                                        );
+                                    })}
+                                </Collapse>
                             </Panel>
-                        ]}
-                        <Panel key={'show_nat_list'} header={'查看NAT转换表'}>
-                            <ShowNAtList/>
-                        </Panel>
-                        <Panel key={'ping'} header={'Ping'}>
-                            <Ping />
-                        </Panel>
-                    </Collapse>
+                            {routerId === 1 && (
+                                <Panel key={'static_route'} header={'静态路由'}>
+                                    <StaticRoute />
+                                </Panel>
+                            )}
+                            {routerId === 2 && [
+                                <Panel key={'static_nat'} header={'静态NAT'}>
+                                    <StaticNAT />
+                                </Panel>,
+                                <Panel key={'access_list'} header={'用户访问控制列表'}>
+                                    <AccessList />
+                                </Panel>,
+                                <Panel key={'dynamic_nat'} header={'动态NAT'}>
+                                    <DynamicNAT />
+                                </Panel>,
+                                <Panel key={'pat'} header={'PAT'}>
+                                    <PAT />
+                                </Panel>
+                            ]}
+                            <Panel key={'show_nat_list'} header={'查看NAT转换表'}>
+                                <ShowNAtList/>
+                            </Panel>
+                            <Panel key={'ping'} header={'Ping'}>
+                                <Ping />
+                            </Panel>
+                        </Collapse>
+                    )}
                 </Card>
             </Spin>
         );

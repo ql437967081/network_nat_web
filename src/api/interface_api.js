@@ -3,8 +3,8 @@ import { interfaceUrl } from './util/url';
 import { getConnection } from '../sessionConfig';
 
 const getInterface = (abbr, handleSuccess) => {
-    const connectionId = getConnection();
-    axios.get(interfaceUrl, { params: { connectionId, abbr } })
+    const connection_id = getConnection();
+    axios.get(interfaceUrl, { params: { connection_id, abbr } })
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);
@@ -13,8 +13,8 @@ const getInterface = (abbr, handleSuccess) => {
 };
 
 const setInterface = (data, handleSuccess) => {
-    const connectionId = getConnection();
-    axios.post(interfaceUrl, data, { params: { connectionId } })
+    const connection_id = getConnection();
+    axios.post(interfaceUrl, data, { params: { connection_id } })
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);

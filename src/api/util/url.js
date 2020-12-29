@@ -1,4 +1,4 @@
-const baseUrl = '/nat';
+const baseUrl = '/NAT';
 
 const telnetUrl = `${baseUrl}/telnet`;
 const exitUrl = `${baseUrl}/exit`;

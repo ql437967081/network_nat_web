@@ -3,8 +3,8 @@ import {natTranslationsUrl} from './util/url';
 import { getConnection } from '../sessionConfig';
 
 const getTranslations = (handleSuccess) => {
-    const connectionId = getConnection();
-    axios.get(natTranslationsUrl, { params: { connectionId } })
+    const connection_id = getConnection();
+    axios.get(natTranslationsUrl, { params: { connection_id } })
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);
@@ -13,13 +13,13 @@ const getTranslations = (handleSuccess) => {
 };
 
 const delTranslations = (handleSuccess) => {
-    const connectionId = getConnection();
-    axios.delete(natTranslationsUrl , {params: {connectionId}})
+    const connection_id = getConnection();
+    axios.delete(natTranslationsUrl , {params: {connection_id}})
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);
         })
         .catch(handleFailure);
-}
+};
 
-export {getTranslations , delTranslations}
+export {getTranslations , delTranslations};

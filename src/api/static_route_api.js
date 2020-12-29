@@ -3,8 +3,8 @@ import { staticRouteUrl} from './util/url';
 import { getConnection } from '../sessionConfig';
 
 const setStaticRoute = (handleSuccess) =>{
-    const connectionId = getConnection();
-    axios.post( staticRouteUrl, { params: { connectionId } })
+    const connection_id = getConnection();
+    axios.post( staticRouteUrl, { params: { connection_id } })
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);
@@ -12,4 +12,4 @@ const setStaticRoute = (handleSuccess) =>{
         .catch(handleFailure);
 };
 
-export {setStaticRoute}
+export {setStaticRoute};

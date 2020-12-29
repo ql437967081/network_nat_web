@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, Col, Form, Input, message, Row } from 'antd';
+import { Button, Col, Form, Input, message, Row, Spin } from 'antd';
 import { CheckOutlined } from "@ant-design/icons";
 import { getConnection } from '../../sessionConfig';
 import { backendModeConfig } from '../../api/util/default';
 import { getHostname, setHostname } from '../../api/hostname_api';
 
 export default class BasicForm extends React.Component {
-    state = { loading: false };
+    state = { loading: false, formLoading: false };
 
     formRef = React.createRef();
 
@@ -14,7 +14,11 @@ export default class BasicForm extends React.Component {
         const connectionId = getConnection();
         console.log(`（Connection: ${connectionId}）获取基本信息……`);
         if (backendModeConfig) {
-            getHostname(hostname => this.formRef.current.setFieldsValue({ hostname }));
+            this.setState({ formLoading: true });
+            getHostname(hostname => {
+                this.setState({ formLoading: false });
+                this.formRef.current.setFieldsValue({ hostname })
+            });
         } else {
             this.formRef.current.setFieldsValue({ hostname: 'R1' });
         }
@@ -38,24 +42,26 @@ export default class BasicForm extends React.Component {
     };
 
     render() {
-        const { loading } = this.state;
+        const { loading, formLoading } = this.state;
         const layout = {
             labelCol: { span: 8 },
             wrapperCol: { span: 10 },
         };
         const rules = [{ required: true, message: '请输入主机名' }];
         return (
-            <Form {...layout} ref={this.formRef} onFinish={this.onFinish} onFinishFailed={this.onFinishFailed}>
-                <Form.Item label={'主机名'} name={'hostname'} rules={rules}><Input /></Form.Item>
-                <Row justify="space-between">
-                    <Col />
-                    <Col>
-                        <Button type="primary" icon={<CheckOutlined />} htmlType="submit" loading={loading}>
-                            提交
-                        </Button>
-                    </Col>
-                </Row>
-            </Form>
+            <Spin size={'large'} tip={'基本信息载入中'} spinning={formLoading}>
+                <Form {...layout} ref={this.formRef} onFinish={this.onFinish} onFinishFailed={this.onFinishFailed}>
+                    <Form.Item label={'主机名'} name={'hostname'} rules={rules}><Input /></Form.Item>
+                    <Row justify="space-between">
+                        <Col />
+                        <Col>
+                            <Button type="primary" icon={<CheckOutlined />} htmlType="submit" loading={loading}>
+                                提交
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
+            </Spin>
         );
     }
 }

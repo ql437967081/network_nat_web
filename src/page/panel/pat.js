@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import {Button, Col, Row} from 'antd';
+import React, { useState } from 'react';
+import {Button, Col, message, Row} from 'antd';
 import GeneralContent from './general_content';
 import { backendModeConfig } from '../../api/util/default';
 import { setPat } from '../../api/pat_api';
+import { getRouterId } from '../../sessionConfig';
 
 export default function PAT() {
     const [result, setResult] = useState(null);
@@ -10,6 +11,10 @@ export default function PAT() {
     const [loading, setLoading] = useState(false);
 
     const conf = () => {
+        if (getRouterId() !== 2) {
+            message.error('PAT请在R2上配置！');
+            return;
+        }
         console.log('配置PAT');
         if (backendModeConfig) {
             setLoading(true);

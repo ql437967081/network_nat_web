@@ -3,8 +3,8 @@ import {patUrl} from './util/url';
 import { getConnection } from '../sessionConfig';
 
 const setPat = (handleSuccess) => {
-    const connectionId = getConnection();
-    axios.post(patUrl, null,{ params: { connectionId } })
+    const connection_id = getConnection();
+    axios.post(patUrl, null,{ params: { connection_id } })
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);
@@ -12,4 +12,4 @@ const setPat = (handleSuccess) => {
         .catch(handleFailure);
 };
 
-export {setPat}
+export {setPat};

@@ -12,8 +12,8 @@ const telnet = (router_id , handleSuccess)=>{
 };
 
 const exit = (handleSuccess)=>{
-    const connectionId = getConnection();
-    axios.post(exitUrl, null ,{params: {connectionId}})
+    const connection_id = getConnection();
+    axios.post(exitUrl, null ,{params: {connection_id}})
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);

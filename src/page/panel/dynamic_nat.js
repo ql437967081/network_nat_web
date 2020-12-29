@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Col, Row } from 'antd';
+import { Button, Col, message, Row } from 'antd';
 import GeneralContent from './general_content';
 import { backendModeConfig } from '../../api/util/default';
 import { setDynamicNat, delDynamicNat } from '../../api/dynamic_nat_api';
+import { getRouterId } from '../../sessionConfig';
 
 export default function DynamicNAT() {
     const [result, setResult] = useState(null);
@@ -11,7 +12,16 @@ export default function DynamicNAT() {
 
     const [spinTip, setSpinTip] = useState(null);
 
+    const checkRouter = () => {
+        if (getRouterId() !== 2) {
+            message.error('动态NAT请在R2上配置！');
+            return false;
+        }
+        return true;
+    };
+
     const conf = () => {
+        if (!checkRouter()) return;
         console.log('配置动态NAT');
         if (backendModeConfig) {
             setLoading(true);
@@ -29,6 +39,7 @@ export default function DynamicNAT() {
     };
 
     const delConf = () => {
+        if (!checkRouter()) return;
         console.log('删除动态NAT配置');
         if (backendModeConfig) {
             setLoading(true);

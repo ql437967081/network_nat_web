@@ -3,8 +3,8 @@ import {staticNatUrl} from './util/url';
 import { getConnection } from '../sessionConfig';
 
 const setStaticNat = (handleSuccess) => {
-    const connectionId = getConnection();
-    axios.post(staticNatUrl, null,{ params: { connectionId } })
+    const connection_id = getConnection();
+    axios.post(staticNatUrl, null,{ params: { connection_id } })
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);
@@ -13,13 +13,13 @@ const setStaticNat = (handleSuccess) => {
 };
 
 const delStaticNat = (handleSuccess) => {
-    const connectionId = getConnection();
-    axios.delete(staticNatUrl,{params:{connectionId}})
+    const connection_id = getConnection();
+    axios.delete(staticNatUrl,{params:{connection_id}})
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);
         })
         .catch(handleFailure);
-}
+};
 
-export {setStaticNat , delStaticNat}
+export {setStaticNat , delStaticNat};

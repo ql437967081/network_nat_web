@@ -3,8 +3,8 @@ import {hostnameUrl} from './util/url';
 import { getConnection } from '../sessionConfig';
 
 const getHostname = (handleSuccess) => {
-    const connectionId = getConnection();
-    axios.get(hostnameUrl, { params: { connectionId } })
+    const connection_id = getConnection();
+    axios.get(hostnameUrl, { params: { connection_id } })
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);
@@ -13,13 +13,13 @@ const getHostname = (handleSuccess) => {
 };
 
 const setHostname = (hostname , handleSuccess) => {
-    const connectionId = getConnection();
-    axios.post(hostnameUrl, {hostname} ,{params:{connectionId}})
+    const connection_id = getConnection();
+    axios.post(hostnameUrl, {hostname} ,{params:{connection_id}})
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);
         })
         .catch(handleFailure);
-}
+};
 
-export {getHostname ,setHostname}
+export {getHostname ,setHostname};
