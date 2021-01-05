@@ -97,7 +97,14 @@ GET: /nat_translations
 show ip nat translations
 ```
 
-返回值：output
+返回值：
+
+```python
+{
+    result: '',
+    status: True
+}
+```
 
 ## 清除NAT转换表
 
@@ -117,7 +124,14 @@ GET: /ping
 
 参数：connection_id	target	source（源地址、可能为空）
 
-返回值：output
+返回值：
+
+```python
+{
+    result: '',
+    status: True
+}
+```
 
 ## 设置静态路由
 
