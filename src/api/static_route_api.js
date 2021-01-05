@@ -4,7 +4,7 @@ import { getConnection } from '../sessionConfig';
 
 const setStaticRoute = (handleSuccess) =>{
     const connection_id = getConnection();
-    axios.post( staticRouteUrl, { params: { connection_id } })
+    axios.post( staticRouteUrl, null, { params: { connection_id } })
         .then(function (response) {
             console.log(response);
             handleSuccess(response.data);
